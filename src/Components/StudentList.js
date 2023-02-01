@@ -1,16 +1,31 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {actionDeleteStudent, actionSelectStudent} from '../redux/actions/studentAction';
+import {
+  actionDeleteStudent,
+  actionSelectStudent,
+} from "../redux/actions/studentAction";
+import axios from "axios";
 
 class TableInfo extends Component {
-  deleteStudent= async(id)=>{
+  deleteStudent = async (id) => {
     this.props.dispatch(actionDeleteStudent(id));
-  }
-  handleSelectStudent = async (id)=>{
+  };
+  handleSelectStudent = async (id) => {
     this.props.dispatch(actionSelectStudent(id));
-    
-  }
-  renderTable=()=>{
+    document.documentElement.scrollTop=0;
+    const res = await axios({
+      method: "GET",
+      url: "https://6388b315d94a7e5040a45713.mockapi.io/students/",
+      params: {
+        id: id || undefined,
+      },
+    });
+    const valueId= res.data[0].id;
+    // console.log(valueId);
+    console.log(this.props.isCreateStudent);
+  };
+  
+  renderTable = () => {
     return this.props.students.map((item, index) => {
       return (
         <tr key={index}>
@@ -19,13 +34,22 @@ class TableInfo extends Component {
           <td>{item.phone}</td>
           <td>{item.email}</td>
           <td>
-            <button className="btn btn-warning me-2" onClick={()=>this.handleSelectStudent(item.id)}>Chỉnh sửa</button>
-            <button className="btn btn-danger" onClick={()=>this.deleteStudent(item.id)}>Xoá</button>
+            <button
+              className="btn btn-warning me-2"
+              onClick={() => this.handleSelectStudent(item.id)}>
+              Chỉnh sửa
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => this.deleteStudent(item.id)}
+            >
+              Xoá
+            </button>
           </td>
         </tr>
       );
-    })
-  }
+    });
+  };
   render() {
     return (
       <div className="container">
@@ -39,11 +63,7 @@ class TableInfo extends Component {
               <th scope="col"></th>
             </tr>
           </thead>
-          <tbody>
-            
-            {this.renderTable()}
-            
-          </tbody>
+          <tbody>{this.renderTable()}</tbody>
         </table>
       </div>
     );
@@ -53,7 +73,8 @@ class TableInfo extends Component {
 const mapStateToProps = (state) => {
   return {
     students: state.studentReducer.students,
-    isCreateStudent: state.studentReducer.isCreateStudent
+    isCreateStudent: state.studentReducer.isCreateStudent,
+    
   };
 };
 

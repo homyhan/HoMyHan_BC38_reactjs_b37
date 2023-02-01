@@ -5,7 +5,8 @@ const initialState={
     students:[],
     selectedStudent: null,
     searchTerm:"",
-    isCreateStudent: true
+    isCreateStudent: true,
+    
 }
 
 export const studentReducer = (state=initialState, {type, payload})=>{
@@ -17,7 +18,8 @@ export const studentReducer = (state=initialState, {type, payload})=>{
         }
         if(type===actionTypes.SELECTED_STUDENT){
             draft.selectedStudent = payload
-            draft.isCreateStudent = !state.isCreateStudent
+            draft.isCreateStudent = false
+            
         }
         if(type === actionTypes.SEARCH_TERM){
             draft.searchTerm = payload

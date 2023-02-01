@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { actionCreateStudent, actionUpdateStudent } from "../redux/actions/studentAction";
+import { actionCreateStudent, actionUpdateStudent, actionSelectStudent } from "../redux/actions/studentAction";
 import { connect } from "react-redux";
 
 class Form extends Component {
@@ -120,15 +120,22 @@ class Form extends Component {
           email: "",
         },
       });
-      // this.props.dispatch(actionIsCreateStudent(payload));
       console.log(this.props.isCreateStudent);
     } catch (error) {
       console.log(error);
     }
     
   };
+  isDisabledInput=()=>{
+    if(this.props.isCreateStudent){
+      return false;
+    }else{
+      return true;
+    }
+  }
   render() {
     const { values, errors } = this.state;
+    
     return (
       <div className="container">
         <div className="card w-100 p-5">
@@ -148,7 +155,9 @@ class Form extends Component {
                   value={values.id}
                   onChange={this.handleChange}
                   onBlur={this.handleBlur}
+                  disabled={!(this.props.isCreateStudent)}
                 />
+                
                 {errors.id && <div className="alert alert-danger mt-2 mb-0">{errors.id}</div>}
               </div>
               <div className="col">
@@ -198,6 +207,7 @@ class Form extends Component {
               <button className="btn btn-success">Submit</button>
             </div>
           </form>
+          
         </div>
       </div>
     );
@@ -216,7 +226,8 @@ class Form extends Component {
 const mapStateToProps = state =>{
   return {
     seletedStudent: state.studentReducer.selectedStudent,
-    isCreateStudent: state.studentReducer.isCreateStudent
+    isCreateStudent: state.studentReducer.isCreateStudent,
+    
   }
 }
 
